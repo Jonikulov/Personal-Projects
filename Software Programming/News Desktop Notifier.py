@@ -4,7 +4,7 @@ Gives notification on desktop if there's a new post on the website,
 main title of the post is displayed in the notification.
 
 - https://beautiful-soup-4.readthedocs.io/en/
-- https://plyer.readthedocs.io/en/
+- https://versa-syahptr.github.io/winotify/docs/
 
 """
 
@@ -15,17 +15,7 @@ import requests
 from PIL import Image
 from io import BytesIO
 from bs4 import BeautifulSoup
-from plyer import notification
-
-
-def notify_me(post_title, post_link, ico_img):
-    notification.notify(
-        title = "KUN.UZ Yangiliklari",
-        message = post_title,
-        app_name = "News",
-        app_icon = ico_img,
-        timeout = 2
-    )
+from winotify import Notification, audio
 
 
 def notify_new_post():
@@ -43,12 +33,12 @@ def notify_new_post():
     post_title = latest_post.find("p", class_="news-title").text
     if latest_post.find("img"):
         post_img = latest_post.find("img")["src"]
-        ico_img = "icon.ico"
+        ico_img = "D:\GitHub\Personal-Projects\Software Programming\icon.png"
         # Converts an image from a URL to ICO format and saves it.
         Image.open(BytesIO(requests.get(post_img).content)).save(ico_img)
     else:
         post_img = None
-        ico_img = None
+        ico_img = ""
 
     try:
         with open("cache.json", 'r') as file:
@@ -65,10 +55,17 @@ def notify_new_post():
         print("TITLE:", post_title)
         print("LINK:", post_link)
 
-        notify_me(post_title, post_link, ico_img)
+        toast = Notification(app_id="KUN.UZ yangiliklari",
+                             title=post_title,
+                             duration="short",
+                             icon=ico_img)
+        toast.set_audio(audio.SMS, loop=False)
+        toast.add_actions(label="Batafsil ko'rish", launch=post_link)
+        toast.show()
 
         # Save the post data
-        latest_cache = {"title": post_title, "link": post_link, "img": post_img}
+        latest_cache = {"title": post_title, "link": post_link,
+                        "img": post_img}
         cache.append(latest_cache)
         with open("cache.json", 'w') as file:
             json.dump(cache, file, indent=4)
@@ -77,5 +74,6 @@ def notify_new_post():
 if __name__ == "__main__":
     while True:
         notify_new_post()
-        time.sleep(900)  # pause 15 minutes
-        if os.path.exists("icon.ico"): os.remove("icon.ico")
+        time.sleep(3)  # pause 15 minutes
+        if os.path.exists("icon.png"):
+            os.remove("icon.png")
