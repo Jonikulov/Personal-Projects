@@ -57,6 +57,7 @@ def notify_new_post():
 
         toast = Notification(app_id="KUN.UZ yangiliklari",
                              title=post_title,
+                            #  msg="There's a message for you!",
                              duration="short",
                              icon=ico_img)
         toast.set_audio(audio.SMS, loop=False)
