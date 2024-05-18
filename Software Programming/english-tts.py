@@ -2,14 +2,15 @@
 '''
 # python text to speech free
 
-- elevenlabs: Antoni, Adam, Drew, Josh, Michael
-- gTTS
-+ coquiTTS (https://github.com/coqui-ai/TTS)
-
-+ tensorflowTTS
 + pyttsx3
-+ Larynx
+
+ elevenlabs: Antoni, Adam, Drew, Josh, Michael
+ gTTS
+ coquiTTS (https://github.com/coqui-ai/TTS)
+ tensorflowTTS
+ Larynx
 + edge-tts
+
 + Google Cloud Text-to-Speech
 + https://github.com/KoljaB/RealtimeTTS
 + OpenAI TTS, faster whisper
@@ -27,25 +28,43 @@
 
 import os
 import time
+os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = '1'
 
 from pygame import mixer
 
-os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = '1'
 
-text = "This is a test of text-to-speech."
 wav = r"D:\GitHub\JARVIS\voices\you have a new message sir.wav"
-mp3 = "sound.mp3"
-mp3 = r"D:\Cloud Backup\Kung Fu Panda Trilogy Ultimate Cut_320kbps.mp3"
+mp3 = r"D:\Cloud Backup\Theme of the Week 22  The Avengers Theme from Age of Ultron_320kbps.mp3"
 
-mixer.init()
-mixer.music.load(wav)
-mixer.music.play()
-while mixer.music.get_busy():
-    time.sleep(1)
-mixer.quit()
+def play_audio(audio_file):
+    """Plays existing audio file."""
+    mixer.init()
+    mixer.Sound(audio_file).play()
+    while mixer.get_busy():
+        time.sleep(0.1)
+    mixer.quit()
 
-# playaudio(mp3)
-print("Done!")
+play_audio(mp3)
+
+
+
+text1 = "I will speak this text."
+text2 = "Starting system. Hello Sir! I'm JARVIS."
+text3 = "This is a test of text-to-speech."
+
+import pyttsx3
+
+engine = pyttsx3.init()
+engine.setProperty('rate', 175)
+# engine.setProperty('volume', 0.7)
+
+engine.say(text1)
+# engine.save_to_file("Hello World", 'test.wav')
+engine.runAndWait()
+engine.stop()
+
+
+
 
 
 
