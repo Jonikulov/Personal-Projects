@@ -1,4 +1,8 @@
 """
++ gtts
++ https://themetavoice.xyz/
+    + https://colab.research.google.com/drive/1XByfMhtlryA38CR2xBbhHeEqq2-cTjIa?usp=sharing#scrollTo=bcQr2Xf7hdZa
++ https://youtu.be/gVKbf31hrYs
 + https://home-assistant.io/integrations/microsoft/
 + https://learn.microsoft.com/en-us/azure/ai-services/speech-service/index-text-to-speech
 + https://home-assistant.io/integrations/yandextts/
@@ -17,6 +21,9 @@
 + VallE-X - https://github.com/Plachtaa/VALL-E-X
 + BARK AI: https://github.com/suno-ai/bark
 + https://youtu.be/gwrKk649-Pw
++ microsoft azure text to speech
++ microsoft edge text to speech
++ microsoft text to speech
 
 UNINSTALL packages: playaudio playsound gTTS gtts
 """
