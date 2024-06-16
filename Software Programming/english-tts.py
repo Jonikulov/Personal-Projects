@@ -1,14 +1,6 @@
 """
-+ https://youtu.be/gVKbf31hrYs
-+ https://home-assistant.io/integrations/microsoft/
-+ https://learn.microsoft.com/en-us/azure/ai-services/speech-service/index-text-to-speech
-+ https://home-assistant.io/integrations/yandextts/
-+ https://home-assistant.io/integrations/watson_tts/
-+ https://home-assistant.io/integrations/picotts/
-+ https://home-assistant.io/integrations/amazon_polly/
-+ https://home-assistant.io/integrations/google_cloud/#configuration
-+ https://github.com/KoljaB/RealtimeTTS
 + OpenAI TTS, faster whisper
++ https://github.com/KoljaB/RealtimeTTS
 + StyleTTS - https://github.com/yl4579/StyleTTS2?t...
 + Eleven's Style TTS - https://github.com/IIEleven11/StyleTT...
 + Coqui TTS - https://github.com/coqui-ai/TTS
@@ -94,7 +86,7 @@ def edgetts(voice, text):
 
 
 text = "I will speak this text."
-# pytts_offline(text)
+pytts_offline(text)
 
-# text = "Computer Science and Information Technology."
-# edgetts(0, text)
+text = "Computer Science and Information Technology."
+edgetts(1, text)
