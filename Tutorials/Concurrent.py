@@ -1,5 +1,5 @@
 import time
-import threading
+from concurrent.futures import ThreadPoolExecutor
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -46,9 +46,8 @@ def do_task(click_range):
     driver.quit()
 
 
-
-num_threads = 4 # 5 6 7 8
-num_rows = 31  # 211
+num_threads = 5  # 4 5 6 7 8
+num_rows = 31  # 31
 thread_chunk = num_rows // num_threads
 remainder = num_rows % num_threads
 
@@ -69,13 +68,9 @@ print("#" * 70)
 
 start_time = time.time()
 threads = []
-for t_range in thread_ranges:
-    t = threading.Thread(target=do_task, args=[t_range])
-    t.start()
-    threads.append(t)
 
-for t in threads:
-    t.join()
+with ThreadPoolExecutor(max_workers=5) as executor:
+    executor.map(do_task, thread_ranges)
 
 exec_time = time.time() - start_time
 print("\nParallel execution time:", exec_time)
@@ -85,8 +80,8 @@ print('num_rows:', num_rows)
 print('thread_chunk:', thread_chunk)
 print('thread_ranges:', thread_ranges)
 
-# 31, 8 threads -> 38 seconds
-# 31, 7 threads -> 36.5 seconds
-# 31, 6 threads -> 37 seconds
-# 31, 5 threads -> 44 seconds
-# 31, 4 threads -> 50 seconds
+# 31, 8 threads -> 34 seconds
+# 31, 7 threads -> 38.7 seconds
+# 31, 6 threads -> 39.5 seconds
+# 31, 5 threads -> 43 seconds
+# 31, 4 threads -> 44.5 seconds
