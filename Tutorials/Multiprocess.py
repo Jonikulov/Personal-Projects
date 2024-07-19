@@ -1,4 +1,5 @@
 import time
+import threading
 import multiprocessing
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -72,7 +73,8 @@ if __name__ == '__main__':
     start_time = time.time()
     threads = []
     for t_range in thread_ranges:
-        t = multiprocessing.Process(target=do_task, args=[t_range])
+        # t = multiprocessing.Process(target=do_task, args=[t_range])
+        t = threading.Thread(target=do_task, args=[t_range])
         t.start()
         threads.append(t)
 

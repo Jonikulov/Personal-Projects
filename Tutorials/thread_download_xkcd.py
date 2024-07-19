@@ -3,9 +3,10 @@ import requests
 import bs4
 import time
 import threading
+import multiprocessing
 
-os.makedirs("xkcd1", exist_ok=True)
-os.makedirs("xkcd2", exist_ok=True)
+# os.makedirs("xkcd1", exist_ok=True)
+# os.makedirs("xkcd2", exist_ok=True)
 url = 'https://xkcd.com/'
 
 def download_xkcd_1(start_url, end_url):
@@ -53,20 +54,16 @@ def download_xkcd_3(t_range):
                 print(f'{url_num}: Downloading image: {img_link}')
                 # requests.get(img_link)
                 img = requests.get(img_link)
-                if img.status_code == 200:
-                    with open(os.path.join('xkcd2', os.path.basename(img_link)),
-                                'wb') as file:
-                        file.write(img.content)
+                # if img.status_code == 200:
+                #     with open(os.path.join('xkcd2', os.path.basename(img_link)),
+                #                 'wb') as file:
+                #         file.write(img.content)
 
 
-start_time = time.time()
-# download_xkcd_1(1, 11)
-exec_time = time.time() - start_time
-print("\nSequential execution time:", exec_time)
-
-print("#" * 70)
-
-start_time = time.time()
+# start_time = time.time()
+# # download_xkcd_1(1, 11)
+# exec_time = time.time() - start_time
+# print("\nSequential execution time:", exec_time)
 
 # download_threads = []
 # for t in range(1, 1001, 10):
@@ -77,31 +74,37 @@ start_time = time.time()
 # for t in download_threads:
 #     t.join()
 
-num_threads = 4
-num_rows = 31  # 341
-thread_chunk = num_rows // num_threads
-remainder = num_rows % num_threads
+if __name__ == '__main__':
 
-start = 0
-thread_ranges = []
-for i in range(num_threads):
-    end = start + thread_chunk + (1 if i < remainder else 0)
-    thread_ranges.append(range(start, end))
-    start = end
+    print("#" * 70)
+    start_time = time.time()
 
-threads = []
-for t_range in thread_ranges:
-    t = threading.Thread(target=download_xkcd_3, args=[t_range])
-    t.start()
-    threads.append(t)
+    num_threads = 15
+    num_rows = 300
+    thread_chunk = num_rows // num_threads
+    remainder = num_rows % num_threads
 
-for t in threads:
-    t.join()
+    start = 0
+    thread_ranges = []
+    for i in range(num_threads):
+        end = start + thread_chunk + (1 if i < remainder else 0)
+        thread_ranges.append(range(start, end))
+        start = end
 
-exec_time = time.time() - start_time
-print("\nParallel execution time:", exec_time)
+    threads = []
+    for t_range in thread_ranges:
+        t = threading.Thread(target=download_xkcd_3, args=[t_range])  # 18
+        # t = multiprocessing.Process(target=download_xkcd_3, args=[t_range])  # 20
+        t.start()
+        threads.append(t)
 
-print('num_threads:', num_threads)
-print('num_rows:', num_rows)
-print('thread_chunk:', thread_chunk)
-print('thread_ranges:', thread_ranges)
+    for t in threads:
+        t.join()
+
+    exec_time = time.time() - start_time
+    print("\nParallel execution time:", exec_time)
+
+    print('num_threads:', num_threads)
+    print('num_rows:', num_rows)
+    print('thread_chunk:', thread_chunk)
+    # print('thread_ranges:', thread_ranges)
