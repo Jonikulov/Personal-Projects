@@ -8,6 +8,9 @@ opencv-python = "*"
 numpy = "*"
 pillow = "*"
 opencv-contrib-python = "*"
+requests = "*"
+pygame = "*"
+edge-tts = "*"
 
 [dev-packages]
 

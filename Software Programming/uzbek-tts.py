@@ -1,15 +1,29 @@
 import os
 import time
 import json
+import pickle
 import requests
-from io import BytesIO
-os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = '1'
-
-from dotenv import load_dotenv
-from pygame import mixer
 import edge_tts
+from io import BytesIO
+from pygame import mixer
+from getpass import getpass
 
-load_dotenv(dotenv_path="credentials.env")
+# os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = '1'  # TODO
+
+try:
+    # Read api keys
+    with open("credentials.env", 'rb') as file:
+        credentials = pickle.load(file)
+except:
+    credentials = {}
+    credentials["MOHIRAI_API_KEY"] = getpass("MOHIRAI API: ")
+    credentials["MUXLISA_API_TOKEN"] = getpass("MUXLISA API: ")
+
+    # Save credentials
+    with open("credentials.env", 'wb') as file:
+        pickle.dump(credentials, file)
+        print("API kalitlar saqlandi.")
+
 
 def play_audio(audio_file):
     """Plays existing audio file."""
@@ -32,10 +46,10 @@ def play_audio_buffer(audio_data):
 def mohirai_tts(api_key, text):
     """Mohir.ai TTS (https://mohir.ai/developers/api/tts)"""
 
-    url = 'https://mohir.ai/api/v1/tts'
+    url = 'https://uzbekvoice.ai/api/v1/tts'
     headers = {'Authorization': api_key, 'Content-Type': 'application/json'}
     data = {'text': text,
-            'model': 'davron',  # jahongir
+            'model': 'davron-neutral',  # jahongir
             'blocking': 'true'}
 
     resp = requests.post(url, headers=headers, data=json.dumps(data))
@@ -60,6 +74,8 @@ def muxlisa_tts(api_key, text):
     if resp.status_code == 200:
         print(text)
         play_audio_buffer(resp.content)
+        with open("salom-uztelecom.wav", 'wb') as file:
+            file.write(resp.content)
     else:
         print(f"Request failed with status code {resp.status_code}: {resp.text}")
 
@@ -81,13 +97,13 @@ def edgetts(voice, text):
     play_audio_buffer(b"".join(audio_data))
 
 
-api_key = os.getenv("MOHIRAI_API_KEY")
+api_key = credentials["MOHIRAI_API_KEY"]
 text = "Sun'iy Intellekt va Ma'lumotlar Ilmi"
-mohirai_tts(api_key, text)
+# mohirai_tts(api_key, text)
 
-api_key = os.getenv("MUXLISA_API_TOKEN")
+api_key = credentials["MUXLISA_API_TOKEN"]
 text = "Dasturiy Ta'minot Muhandisi"
-muxlisa_tts(api_key, text)
+# muxlisa_tts(api_key, text)
 
 text = "Informatika va Axborot Texnologiyalari"
 edgetts(1, text)
