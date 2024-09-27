@@ -5,10 +5,9 @@ import pickle
 import requests
 import edge_tts
 from io import BytesIO
+os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = '1'  # TODO
 from pygame import mixer
 from getpass import getpass
-
-# os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = '1'  # TODO
 
 try:
     # Read api keys
